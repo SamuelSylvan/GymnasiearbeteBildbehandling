@@ -44,18 +44,20 @@ namespace GymnasiearbeteWindowsForms
             this.btnVäljFärg = new System.Windows.Forms.Button();
             this.btnUndersöktFärg = new System.Windows.Forms.Button();
             this.lblUndersöktFärg = new System.Windows.Forms.Label();
+            this.pictureBoxGraf = new System.Windows.Forms.PictureBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxGraf)).BeginInit();
             this.SuspendLayout();
             // 
             // lblTextPunkterInnanför
             // 
             this.lblTextPunkterInnanför.AutoSize = true;
-            this.lblTextPunkterInnanför.Location = new System.Drawing.Point(48, 32);
+            this.lblTextPunkterInnanför.Location = new System.Drawing.Point(6, 32);
             this.lblTextPunkterInnanför.Name = "lblTextPunkterInnanför";
-            this.lblTextPunkterInnanför.Size = new System.Drawing.Size(170, 20);
+            this.lblTextPunkterInnanför.Size = new System.Drawing.Size(205, 20);
             this.lblTextPunkterInnanför.TabIndex = 1;
-            this.lblTextPunkterInnanför.Text = "Antal punkter innanför:";
+            this.lblTextPunkterInnanför.Text = "Antal punkter med valv färg:";
             this.lblTextPunkterInnanför.Click += new System.EventHandler(this.lblTextPunkterInnanför_Click);
             // 
             // lblIntPunkterInnanför
@@ -88,7 +90,7 @@ namespace GymnasiearbeteWindowsForms
             // lblTextAntalPunkter
             // 
             this.lblTextAntalPunkter.AutoSize = true;
-            this.lblTextAntalPunkter.Location = new System.Drawing.Point(112, 52);
+            this.lblTextAntalPunkter.Location = new System.Drawing.Point(110, 55);
             this.lblTextAntalPunkter.Name = "lblTextAntalPunkter";
             this.lblTextAntalPunkter.Size = new System.Drawing.Size(105, 20);
             this.lblTextAntalPunkter.TabIndex = 5;
@@ -106,7 +108,7 @@ namespace GymnasiearbeteWindowsForms
             // 
             // btnBeräkna
             // 
-            this.btnBeräkna.Location = new System.Drawing.Point(135, 345);
+            this.btnBeräkna.Location = new System.Drawing.Point(265, 662);
             this.btnBeräkna.Name = "btnBeräkna";
             this.btnBeräkna.Size = new System.Drawing.Size(87, 32);
             this.btnBeräkna.TabIndex = 7;
@@ -122,7 +124,7 @@ namespace GymnasiearbeteWindowsForms
             this.groupBox1.Controls.Add(this.lblIntAntalPunkter);
             this.groupBox1.Controls.Add(this.lblTextAndelinnanför);
             this.groupBox1.Controls.Add(this.lblIntPunkterInnanför);
-            this.groupBox1.Location = new System.Drawing.Point(135, 12);
+            this.groupBox1.Location = new System.Drawing.Point(54, 352);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(298, 146);
             this.groupBox1.TabIndex = 8;
@@ -136,7 +138,7 @@ namespace GymnasiearbeteWindowsForms
             this.groupBox2.Controls.Add(this.btnVäljFärg);
             this.groupBox2.Controls.Add(this.btnUndersöktFärg);
             this.groupBox2.Controls.Add(this.lblUndersöktFärg);
-            this.groupBox2.Location = new System.Drawing.Point(135, 173);
+            this.groupBox2.Location = new System.Drawing.Point(54, 504);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(298, 152);
             this.groupBox2.TabIndex = 9;
@@ -193,12 +195,24 @@ namespace GymnasiearbeteWindowsForms
             this.lblUndersöktFärg.Size = new System.Drawing.Size(0, 20);
             this.lblUndersöktFärg.TabIndex = 0;
             // 
+            // pictureBoxGraf
+            // 
+            this.pictureBoxGraf.BackColor = System.Drawing.SystemColors.Info;
+            this.pictureBoxGraf.Location = new System.Drawing.Point(39, 12);
+            this.pictureBoxGraf.Name = "pictureBoxGraf";
+            this.pictureBoxGraf.Size = new System.Drawing.Size(313, 322);
+            this.pictureBoxGraf.TabIndex = 10;
+            this.pictureBoxGraf.TabStop = false;
+            this.pictureBoxGraf.Click += new System.EventHandler(this.pictureBoxGraf_Click);
+            this.pictureBoxGraf.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBoxGraf_Paint);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.ClientSize = new System.Drawing.Size(1924, 636);
+            this.ClientSize = new System.Drawing.Size(1924, 732);
+            this.Controls.Add(this.pictureBoxGraf);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnBeräkna);
@@ -210,6 +224,7 @@ namespace GymnasiearbeteWindowsForms
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxGraf)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -230,6 +245,7 @@ namespace GymnasiearbeteWindowsForms
         private System.Windows.Forms.Button btnVäljFärg;
         private System.Windows.Forms.Button btnVit;
         private System.Windows.Forms.Button btnSvart;
+        private System.Windows.Forms.PictureBox pictureBoxGraf;
     }
 }
 

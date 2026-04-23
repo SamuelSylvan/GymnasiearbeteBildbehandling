@@ -24,6 +24,7 @@ namespace GymnasiearbeteWindowsForms
         private Color undersöktFärg;
         private string filnamn = "ifylldElipse.png";
         private Bitmap bmp;
+        private Dictionary<double, int> data = new Dictionary<double, int>();
         private PictureBox bilden = new PictureBox();
         private bool eyeDroperAktiverad = false;
         static ThreadLocal<Random> ThreadLocalRandom = new ThreadLocal<Random>(() => new Random(Guid.NewGuid().GetHashCode()));
@@ -33,7 +34,7 @@ namespace GymnasiearbeteWindowsForms
             bilden.Image = Image.FromFile(filnamn);
             
             bilden.SizeMode = PictureBoxSizeMode.AutoSize; // Automatisk storlek
-            bilden.Location = new Point(0, 0);
+            bilden.Location = new Point(500, 50);
             this.Controls.Add(bilden);
             bilden.Visible = true;
             InitializeComponent();
@@ -41,9 +42,16 @@ namespace GymnasiearbeteWindowsForms
             groupBox1.BringToFront(); 
             groupBox2.BringToFront();
 
-
         }
+
         
+
+        public void RitaOm(Dictionary<double, int> nyData)
+        {
+            data = nyData;              // spara datan
+            pictureBoxGraf.Invalidate();   // trigga omritning
+        }
+
         static bool UndersäkaOmPunktInnanför(int x_värde, int y_värde, Bitmap bmp)
         {
             int nKorsningar = 0;
@@ -123,11 +131,41 @@ namespace GymnasiearbeteWindowsForms
 
         private void btnBeräkna_Click(object sender, EventArgs e)
         {
+            bilden.Image = Image.FromFile(filnamn);
+            using (Graphics g = Graphics.FromImage(bilden.Image))
+            {
+                Stopwatch sw = new Stopwatch();
+                int nPunkter = 1000;
+                int nPunkterInanför = 0;
+                lblDecimalAndelInnanför.Visible = true;
+                sw.Start();
+
+                Random random = new Random();
+
+                for (int i = 0; i < nPunkter; i++)
+                {
+                    int x_värde = random.Next(bmp.Width);
+                    int y_värde = random.Next(bmp.Height);
+                    if (UndersäkaOmPixelHarFärg(x_värde, y_värde, bmp, undersöktFärg))
+                    {
+                        RitaPunkt(x_värde, y_värde, g, Brushes.Red);
+                        nPunkterInanför++;
+                    }
+                    else
+                    {
+                        RitaPunkt(x_värde, y_värde, g, Brushes.Blue);
+                    }
+                    bilden.Refresh();
+                }
+                lblDecimalAndelInnanför.Text = ((double)nPunkterInanför / nPunkter).ToString("F2");
+                lblIntPunkterInnanför.Text = nPunkterInanför.ToString();
+                lblIntAntalPunkter.Text = nPunkter.ToString();
+            }
             File.WriteAllText("data.txt", "");
             Dictionary<double, int> värden = new Dictionary<double, int>();
             btnBeräkna.Enabled = false;
             this.Cursor = Cursors.WaitCursor;
-            bilden.Image = Image.FromFile(filnamn);
+            //
             int pixelHöjd = bmp.Height;
             int pixelBred = bmp.Width;
             var rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
@@ -194,9 +232,6 @@ namespace GymnasiearbeteWindowsForms
                             värden.Add(andelInanför, 1);
                         }
                         sw.Stop();
-                        lblDecimalAndelInnanför.Text = ((double)nPunkterInanför / nPunkter).ToString("F2");
-                        lblIntPunkterInnanför.Text = nPunkterInanför.ToString();
-                        lblIntAntalPunkter.Text = nPunkter.ToString();
                     }
                     double summaAndelarInanför = 0;
                     double summaKvadreradeDiferanser = 0;
@@ -231,6 +266,7 @@ namespace GymnasiearbeteWindowsForms
             {
                 bmp.UnlockBits(bildData);
             }
+            RitaOm(värden);
             this.Cursor = Cursors.Default;
             btnBeräkna.Enabled = true;
             /*
@@ -240,56 +276,7 @@ namespace GymnasiearbeteWindowsForms
             bilden.Image = Image.FromFile(filnamn);
             for (int ii = 0; ii < 100; ii++)
             {
-                using (Graphics g = Graphics.FromImage(bilden.Image))
-                {
-                    Stopwatch sw = new Stopwatch();
-                    int nPunkter = 1000;
-                    int nPunkterInanför = 0;
-                    lblDecimalAndelInnanför.Visible = true;
-                    sw.Start();
-
-                    Random random = new Random();
-
-                    for (int i = 0; i < nPunkter; i++)
-                    {
-                        int x_värde = random.Next(bmp.Width);
-                        int y_värde = random.Next(bmp.Height);
-                        if (UndersäkaOmPixelHarFärg(x_värde, y_värde, bmp, undersöktFärg))
-                        {
-                            RitaPunkt(x_värde, y_värde, g, Brushes.Red);
-                            nPunkterInanför++;
-                        }
-                        else
-                        {
-                            RitaPunkt(x_värde, y_värde, g, Brushes.Blue);
-                        }
-                        bilden.Refresh();
-                    }
-                    try
-                    {
-                        värden[nPunkterInanför]++;
-                    }
-                    catch (Exception)
-                    {
-                        värden.Add(nPunkterInanför, 1);
-                    }
-                    sw.Stop();
-                    lblDecimalAndelInnanför.Text = ((double)nPunkterInanför / nPunkter).ToString("F2");
-                    lblIntPunkterInnanför.Text = nPunkterInanför.ToString();
-                    lblIntAntalPunkter.Text = nPunkter.ToString();
-                }
-                this.Cursor = Cursors.Default;
-            }
-            using (StreamWriter writer = new StreamWriter(@"C:\Users\SamuelSyl\source\repos\GymnasiearbeteWindowsForms\GymnasiearbeteWindowsForms\data.txt", true))
-            {
-
-
-                foreach (KeyValuePair<int, int> item in värden)
-                {
-                    writer.WriteLine($"{item.Key},{item.Value}");
-                }
-
-            }
+                
             btnBeräkna.Enabled = true;
             */
             //_______________________________________________________________
@@ -406,6 +393,42 @@ namespace GymnasiearbeteWindowsForms
             
             sw.Stop();
             */
+        }
+
+        private void pictureBoxGraf_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBoxGraf_Paint(object sender, PaintEventArgs e)
+        {
+            Graphics g = e.Graphics;
+
+            int margin = 10;
+
+            int width = pictureBoxGraf.Width - 2 * margin;
+            int height = pictureBoxGraf.Height - 2 * margin;
+
+            int originX = margin;
+            int originY = pictureBoxGraf.Height - margin;
+
+            Pen pen = new Pen(Color.Black);
+
+            // Axlar
+            g.DrawLine(pen, originX, originY, originX + width, originY); // X
+            g.DrawLine(pen, originX, originY, originX, originY - height); // Y
+
+            foreach (var pair in data)
+            {
+                double xVal = pair.Key;   // 0 → 1
+                double yVal = pair.Value; // 0 → 100
+
+                // 🔥 Skalning
+                int x = originX + (int)(xVal * width);
+                int y = originY - (int)((yVal / 100.0) * height);
+
+                g.FillEllipse(Brushes.Blue, x - 3, y - 3, 6, 6);
+            }
         }
     }
 }
