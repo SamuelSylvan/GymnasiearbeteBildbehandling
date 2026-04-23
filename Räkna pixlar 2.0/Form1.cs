@@ -5,81 +5,28 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Drawing.Imaging;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Diagnostics;
-using System.IO;
-using System.Windows.Forms.DataVisualization.Charting;
-using MathNet.Numerics.Distributions;
 
-
-
-
-namespace GymnasiearbeteWindowsForms
+namespace Räkna_pixlar_2._0
 {
     public partial class Form1 : Form
     {
         private readonly int offset = 40;
-        int decimalersNorganhet = 2; 
-        int nIterationer=10000;
+        int decimalersNorganhet = 2;
+        int nIterationer = 10000;
         private Color undersöktFärg;
         private string filnamn = "ifylldElipse.png";
         private Bitmap bmp;
-        private PictureBox bilden = new PictureBox();
-        private bool eyeDroperAktiverad = false;
-        static ThreadLocal<Random> ThreadLocalRandom = new ThreadLocal<Random>(() => new Random(Guid.NewGuid().GetHashCode()));
+        
         public Form1()
         {
             bmp = new Bitmap(filnamn);
-            bilden.Image = Image.FromFile(filnamn);
             
-            bilden.SizeMode = PictureBoxSizeMode.AutoSize; // Automatisk storlek
-            bilden.Location = new Point(0, 0);
-            this.Controls.Add(bilden);
-            bilden.Visible = true;
-            InitializeComponent();
-            btnBeräkna.BringToFront();
-            groupBox1.BringToFront(); 
-            groupBox2.BringToFront();
-            kordinatsytem1.BringToFront();
-            kordinatsytem1.Series.Clear();
-            kordinatsytem1.ChartAreas.Clear();
-            ChartArea chartArea = new ChartArea("MainArea");
-            kordinatsytem1.ChartAreas.Add(chartArea);
 
 
         }
-        private double BerräknaNormafördelning(double x, double median, double stdDev)
-        {
-            double exponent = Math.Exp(-0.5*Math.Pow((x-median)/stdDev,2));
-            return (1 / (stdDev * Math.Sqrt(2 * Math.PI))) * exponent;
-        }
-        static bool UndersäkaOmPunktInnanför(int x_värde, int y_värde, Bitmap bmp)
-        {
-            int nKorsningar = 0;
-            bool påLinje = false;
-            for (int x = x_värde; x < bmp.Width; x++)
-            {
-                Color pixel = bmp.GetPixel(x, y_värde);
-                bool svart = pixel.R < 128;
-                if (svart && !påLinje)
-                {
-                    nKorsningar++;
-                    påLinje = true;
-                }
-                else if (!svart)
-                {
-                    påLinje = false;
-                }
-            }
-            if (nKorsningar % 2 == 0)
-            {
-                return false;
-            }
-            return true;
-        }
+     
         static bool UndersäkaOmPixelHarFärg(int x_värde, int y_värde, Bitmap bmp, Color färg)
         {
             if (bmp.GetPixel(x_värde, y_värde) == färg)
@@ -89,33 +36,12 @@ namespace GymnasiearbeteWindowsForms
             return true;
 
         }
-        static void RitaPunkt(int x_värde, int y_värde, Graphics g, Brush brush)
-        {
-            int px = x_värde;
-            int py = y_värde;
-
-            Rectangle r = new Rectangle(px - 4, py - 4, 8, 8);
-            g.FillEllipse(brush, r);
-            g.DrawEllipse(Pens.Black, r);
-        }
-        static void BeräknaGrafiskt()
-        {
-
-        }
-
-        private void Bilden_Click(object sender, EventArgs e)
-        {
-
-        }
+      
         private void Bilden_MouseMove(object sender, MouseEventArgs e)
         {
-            btnUndersöktFärg.BackColor = bmp.GetPixel(e.X, e.Y);
         }
 
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            
-        }
+      
 
         private void lblIntAntalPunkter_Click(object sender, EventArgs e)
         {
@@ -135,7 +61,6 @@ namespace GymnasiearbeteWindowsForms
         private void btnBeräkna_Click(object sender, EventArgs e)
         {
             File.WriteAllText("data.txt", "");
-            int antalpixlar = 0;
             btnBeräkna.Enabled = false;
             this.Cursor = Cursors.WaitCursor;
             bilden.Image = Image.FromFile(filnamn);
@@ -151,19 +76,33 @@ namespace GymnasiearbeteWindowsForms
             }
             try
             {
-                for (int bredd = 0; bredd <= bmp.Width; bredd = bredd++)
+                for (int nPunkter = 10; nPunkter <= 10000; nPunkter = nPunkter * 10)
                 {
-                    for (int höjd = 0; höjd < bmp.Height; höjd++)
+                    Dictionary<double, int> värden = new Dictionary<double, int>();
+                    List<double> listaVärden = new List<double>();
+                    for (int ii = 0; ii < nIterationer; ii++)
                     {
                         Stopwatch sw = new Stopwatch();
+
+                        int nPunkterInanför = 0;
                         lblDecimalAndelInnanför.Visible = true;
                         sw.Start();
 
-                        Random random = new Random();                             
+                        Random random = new Random();
+
+                        Parallel.For(
+                            0,
+                            nPunkter,
+                            () => 0,
+                            (i, state, localCount) =>
+                            {
+                                var rnd = ThreadLocalRandom.Value;
+                                int x_värde = rnd.Next(pixelBred);
+                                int y_värde = rnd.Next(pixelHöjd);
                                 unsafe
                                 {
-                                    byte* row = (byte*)scan0 + bredd * stride;
-                                    byte* pixel = row + höjd * 4; // 32bpp ARGB
+                                    byte* row = (byte*)scan0 + y_värde * stride;
+                                    byte* pixel = row + x_värde * 4; // 32bpp ARGB
 
                                     byte b = pixel[0];
                                     byte g = pixel[1];
@@ -172,14 +111,161 @@ namespace GymnasiearbeteWindowsForms
                                     Color färgValdPixel = Color.FromArgb(a, r, g, b);
                                     if (färgValdPixel == undersöktFärg)
                                     {
-                                        antalpixlar++;
+                                        localCount++;
                                     }
                                 }
+
+                                return localCount;
+                            },
+                            localCount =>
+                            {
+                                Interlocked.Add(ref nPunkterInanför, localCount);
+                            });
+                        double andelInanför = (double)nPunkterInanför / nPunkter;
+                        try
+                        {
+                            värden[andelInanför]++;
+                        }
+                        catch (Exception)
+                        {
+                            värden.Add(andelInanför, 1);
+                        }
+                        sw.Stop();
+                        lblDecimalAndelInnanför.Text = ((double)nPunkterInanför / nPunkter).ToString("F2");
+                        lblIntPunkterInnanför.Text = nPunkterInanför.ToString();
+                        lblIntAntalPunkter.Text = nPunkter.ToString();
+                    }
+                    double delta_x = Math.Pow(10, decimalersNorganhet * -1);
+                    if (delta_x < (1 / nPunkter))
+                    {
+                        delta_x = (1 / nPunkter);
+                    }
+                    double summaAndelarInanför = 0;
+                    double summaKvadreradeDiferanser = 0;
+                    double summaArea = 0;
+                    int antalAvTypvärde = 0;
+                    int antaletGenomgångnaTal = 0;
+                    double median = 0;
+                    List<double> typvärden = new List<double>();
+                    // 2. Skapa serien för punkter (Scatter Plot)
+                    /*Series pointSeries = new Series("DataPoints");
+                    pointSeries.ChartType = SeriesChartType.Point;
+                    pointSeries.Color = Color.Blue;
+                    pointSeries.MarkerSize = 4;
+                    kordinatsytem1.Series.Add(pointSeries);
+                    Series normalfördelning = new Series("Kurva");
+                    normalfördelning.ChartType = SeriesChartType.Point;
+                    normalfördelning.Color = Color.Red;
+                    normalfördelning.MarkerSize = 2;
+                    kordinatsytem1.Series.Add(normalfördelning);
+                    */
+                    for (int i = 0; i < bmp; i++)
+                    {
+
                     }
                     using (StreamWriter writer = new StreamWriter(@"C:\Users\SamuelSyl\source\repos\GymnasiearbeteWindowsForms\GymnasiearbeteWindowsForms\data.txt", true))
                     {
-                        lblTextAndelinnanför.Text = "Antal pixlar med vald färg";
-                        lblTextAndelinnanför.Text = antalpixlar.ToString();                        
+                        writer.WriteLine("_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _");
+                        foreach (KeyValuePair<double, int> item in värden)
+                        {
+                            if (antaletGenomgångnaTal == -1)
+                            {
+                                median = (median + item.Key) / 2;
+                                antaletGenomgångnaTal = nIterationer * -1;
+                            }
+                            antaletGenomgångnaTal += item.Value;
+                            if (antaletGenomgångnaTal > nIterationer / 2)
+                            {
+                                median = item.Key;
+                                antaletGenomgångnaTal = nIterationer * -1;
+                            }
+                            else
+                            {
+                                if (antaletGenomgångnaTal == nIterationer / 2)
+                                {
+                                    median = item.Key;
+                                    antaletGenomgångnaTal = -1;
+                                }
+                            }
+                            if (item.Value == antalAvTypvärde)
+                            {
+                                typvärden.Add(item.Key);
+                            }
+                            else
+                            {
+                                if (item.Value > antalAvTypvärde)
+                                {
+                                    typvärden.Clear();
+                                    typvärden.Add(item.Key);
+                                    antalAvTypvärde = item.Value;
+                                }
+                            }
+                            if (true)
+                            {
+
+                            }
+                            summaAndelarInanför += item.Key * item.Value;
+                            //double höjd = item.Value / (nIterationer * delta_x);
+                            //summaArea += höjd * delta_x;
+                            writer.WriteLine($"{(item.Key).ToString().Replace(",", ".")},{(item.Value).ToString().Replace(",", ".")}");
+                            for (int i = 0; i < item.Value; i++)
+                            {
+                                listaVärden.Add(item.Key);
+                            }
+                            //pointSeries.Points.AddXY(item.Key, item.Value);
+                        }
+                        double summaAndelAvIterationer = 0;
+                        double medelvärdeAndelInnanför = summaAndelarInanför / nIterationer;
+                        foreach (KeyValuePair<double, int> item in värden)
+                        {
+                            summaAndelAvIterationer += (double)item.Value / nIterationer;
+                            summaKvadreradeDiferanser += item.Value * Math.Pow(item.Key - medelvärdeAndelInnanför, 2);
+                        }
+
+
+                        double standardavikelse = Math.Sqrt(summaKvadreradeDiferanser / (nIterationer - 1));
+                        writer.WriteLine($"ANTAL PUNKTER {nPunkter}");
+                        writer.WriteLine($"Antal iterationer {nIterationer}");
+                        writer.WriteLine($"STANDARDAVIKELSE {standardavikelse.ToString().Replace(",", ".")} ");
+                        writer.WriteLine($"MEDELVÄRDE {medelvärdeAndelInnanför.ToString().Replace(",", ".")}");
+                        writer.Write($"Typvärde(n): ");
+                        foreach (double typvärde in typvärden)
+                        {
+                            writer.Write($"{typvärde.ToString().Replace(",", ".")},  ");
+                        }
+                        writer.WriteLine();
+                        writer.WriteLine($"AREA {summaArea}");
+                        writer.WriteLine($"SUMMA ANDELAR {summaAndelAvIterationer}");
+                        writer.WriteLine($"Normalfördelning({medelvärdeAndelInnanför.ToString().Replace(",", ".")},{standardavikelse.ToString().Replace(",", ".")},x,false)*{(nIterationer * delta_x).ToString().Replace(",", ".")}");
+                        double minX = medelvärdeAndelInnanför - (4 * standardavikelse);
+                        double maxX = medelvärdeAndelInnanför + (4 * standardavikelse);
+                        double step = 0.01;
+                        /*
+                        for (double x = minX; x <= maxX; x += step)
+                        {
+                            double y = BerräknaNormafördelning(x, medelvärdeAndelInnanför, standardavikelse);
+                            normalfördelning.Points.AddXY(x, y);
+                        }
+                        */
+                    }
+                    using (StreamWriter writer = new StreamWriter($@"C:\Users\SamuelSyl\source\repos\GymnasiearbeteWindowsForms\GymnasiearbeteWindowsForms\qqplot{nPunkter}punkter.txt", true))
+                    {
+                        listaVärden.Sort();
+                        int n = listaVärden.Count;
+                        double my = listaVärden.Average();
+                        double sigma = Math.Sqrt(listaVärden.Select(x => (x - my) * (x - my)).Average());
+                        double[] theoretical = new double[n];
+                        for (int i = 0; i < n; i++)
+                        {
+                            double p = (i + 0.5) / n;
+                            theoretical[i] = Normal.InvCDF(my, sigma, p);
+                        }
+
+
+                        for (int i = 0; i < n; i++)
+                        {
+                            writer.WriteLine($"{ theoretical[i].ToString()}\t{listaVärden[i].ToString()}");
+                        }
                     }
                 }
             }
@@ -290,7 +376,7 @@ namespace GymnasiearbeteWindowsForms
 
         private void BtnVäljFärg_MouseClickAvbryt(object sender, MouseEventArgs e)
         {
-            
+
         }
 
         private void Bilden_MouseClick(object sender, MouseEventArgs e)
@@ -331,7 +417,7 @@ namespace GymnasiearbeteWindowsForms
         {
             //btnUndersöktFärg.BackColor = Color.White;
             //undersöktFärg = Color.White;
-            
+
             /*
              * 
              * using (StreamWriter writer = new StreamWriter("data.txt"))
@@ -365,4 +451,3 @@ namespace GymnasiearbeteWindowsForms
         }
     }
 }
-

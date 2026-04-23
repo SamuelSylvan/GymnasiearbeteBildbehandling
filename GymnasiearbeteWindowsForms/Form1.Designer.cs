@@ -29,6 +29,9 @@ namespace GymnasiearbeteWindowsForms
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.lblTextPunkterInnanför = new System.Windows.Forms.Label();
             this.lblIntPunkterInnanför = new System.Windows.Forms.Label();
             this.lblTextAndelinnanför = new System.Windows.Forms.Label();
@@ -44,8 +47,10 @@ namespace GymnasiearbeteWindowsForms
             this.btnVäljFärg = new System.Windows.Forms.Button();
             this.btnUndersöktFärg = new System.Windows.Forms.Button();
             this.lblUndersöktFärg = new System.Windows.Forms.Label();
+            this.kordinatsytem1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.kordinatsytem1)).BeginInit();
             this.SuspendLayout();
             // 
             // lblTextPunkterInnanför
@@ -193,12 +198,29 @@ namespace GymnasiearbeteWindowsForms
             this.lblUndersöktFärg.Size = new System.Drawing.Size(0, 20);
             this.lblUndersöktFärg.TabIndex = 0;
             // 
+            // kordinatsytem1
+            // 
+            chartArea1.Name = "ChartArea1";
+            this.kordinatsytem1.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.kordinatsytem1.Legends.Add(legend1);
+            this.kordinatsytem1.Location = new System.Drawing.Point(547, 64);
+            this.kordinatsytem1.Name = "kordinatsytem1";
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.kordinatsytem1.Series.Add(series1);
+            this.kordinatsytem1.Size = new System.Drawing.Size(583, 380);
+            this.kordinatsytem1.TabIndex = 10;
+            this.kordinatsytem1.Text = "chart1";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.MenuHighlight;
             this.ClientSize = new System.Drawing.Size(1924, 636);
+            this.Controls.Add(this.kordinatsytem1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnBeräkna);
@@ -210,6 +232,7 @@ namespace GymnasiearbeteWindowsForms
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.kordinatsytem1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -230,6 +253,7 @@ namespace GymnasiearbeteWindowsForms
         private System.Windows.Forms.Button btnVäljFärg;
         private System.Windows.Forms.Button btnVit;
         private System.Windows.Forms.Button btnSvart;
+        private System.Windows.Forms.DataVisualization.Charting.Chart kordinatsytem1;
     }
 }
 
