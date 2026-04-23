@@ -80,9 +80,9 @@ namespace GymnasiearbeteWindowsForms
         {
             if (bmp.GetPixel(x_värde, y_värde) == färg)
             {
-                return false;
+                return true;
             }
-            return true;
+            return false;
 
         }
         static void RitaPunkt(int x_värde, int y_värde, Graphics g, Brush brush)
@@ -296,8 +296,7 @@ namespace GymnasiearbeteWindowsForms
             {
                 this.Cursor = Cursors.Default;
                 btnBeräkna.Enabled = true;
-                btnSvart.Enabled = true;
-                btnVit.Enabled = true;
+                
                 bilden.MouseEnter -= Bilden_MouseEnter;
                 bilden.MouseMove -= Bilden_MouseMove;
                 bilden.MouseLeave -= Bilden_MouseLeave;
@@ -313,8 +312,7 @@ namespace GymnasiearbeteWindowsForms
                 bilden.MouseClick += Bilden_MouseClick;
                 btnVäljFärg.Text = "Avbryt";
                 btnBeräkna.Enabled = false;
-                btnSvart.Enabled = false;
-                btnVit.Enabled = false;
+                
             }
             eyeDroperAktiverad = !eyeDroperAktiverad;
         }
@@ -336,8 +334,6 @@ namespace GymnasiearbeteWindowsForms
             btnVäljFärg.Text = "Välj färg";
             btnBeräkna.Enabled = true;
             btnBeräkna.Enabled = true;
-            btnSvart.Enabled = true;
-            btnVit.Enabled = true;
             eyeDroperAktiverad = false;
         }
 
@@ -402,15 +398,28 @@ namespace GymnasiearbeteWindowsForms
 
         private void pictureBoxGraf_Paint(object sender, PaintEventArgs e)
         {
+
+            
             Graphics g = e.Graphics;
 
-            int margin = 10;
+            int margin = 15;
 
             int width = pictureBoxGraf.Width - 2 * margin;
             int height = pictureBoxGraf.Height - 2 * margin;
 
             int originX = margin;
             int originY = pictureBoxGraf.Height - margin;
+
+
+            Font font = new Font("Arial", 10);
+            Brush brush = Brushes.Black;
+
+
+            // räkna ut position (samma skalning som punkterna!)
+            int xlabel5 = originX + (int)(0.5 * width);
+            int ylabel5 = originY; // lite under axeln
+
+            g.DrawString("0.5", font, brush, xlabel5 - margin, ylabel5);
 
             Pen pen = new Pen(Color.Black);
 

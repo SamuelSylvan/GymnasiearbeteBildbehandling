@@ -39,21 +39,25 @@ namespace GymnasiearbeteWindowsForms
             this.btnBeräkna = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.btnVit = new System.Windows.Forms.Button();
-            this.btnSvart = new System.Windows.Forms.Button();
             this.btnVäljFärg = new System.Windows.Forms.Button();
             this.btnUndersöktFärg = new System.Windows.Forms.Button();
             this.lblUndersöktFärg = new System.Windows.Forms.Label();
             this.pictureBoxGraf = new System.Windows.Forms.PictureBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.lblTextAntalIterationer = new System.Windows.Forms.Label();
+            this.lblTextAntalPixlarPerIteration = new System.Windows.Forms.Label();
+            this.lblTextStandardavikelse = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxGraf)).BeginInit();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTextPunkterInnanför
             // 
             this.lblTextPunkterInnanför.AutoSize = true;
-            this.lblTextPunkterInnanför.Location = new System.Drawing.Point(6, 32);
+            this.lblTextPunkterInnanför.Location = new System.Drawing.Point(13, 32);
             this.lblTextPunkterInnanför.Name = "lblTextPunkterInnanför";
             this.lblTextPunkterInnanför.Size = new System.Drawing.Size(205, 20);
             this.lblTextPunkterInnanför.TabIndex = 1;
@@ -90,11 +94,11 @@ namespace GymnasiearbeteWindowsForms
             // lblTextAntalPunkter
             // 
             this.lblTextAntalPunkter.AutoSize = true;
-            this.lblTextAntalPunkter.Location = new System.Drawing.Point(110, 55);
+            this.lblTextAntalPunkter.Location = new System.Drawing.Point(55, 55);
             this.lblTextAntalPunkter.Name = "lblTextAntalPunkter";
-            this.lblTextAntalPunkter.Size = new System.Drawing.Size(105, 20);
+            this.lblTextAntalPunkter.Size = new System.Drawing.Size(163, 20);
             this.lblTextAntalPunkter.TabIndex = 5;
-            this.lblTextAntalPunkter.Text = "AntalPunkter:";
+            this.lblTextAntalPunkter.Text = "Antal slumpade pixlar:";
             // 
             // lblIntAntalPunkter
             // 
@@ -108,7 +112,7 @@ namespace GymnasiearbeteWindowsForms
             // 
             // btnBeräkna
             // 
-            this.btnBeräkna.Location = new System.Drawing.Point(265, 662);
+            this.btnBeräkna.Location = new System.Drawing.Point(265, 849);
             this.btnBeräkna.Name = "btnBeräkna";
             this.btnBeräkna.Size = new System.Drawing.Size(87, 32);
             this.btnBeräkna.TabIndex = 7;
@@ -124,52 +128,30 @@ namespace GymnasiearbeteWindowsForms
             this.groupBox1.Controls.Add(this.lblIntAntalPunkter);
             this.groupBox1.Controls.Add(this.lblTextAndelinnanför);
             this.groupBox1.Controls.Add(this.lblIntPunkterInnanför);
-            this.groupBox1.Location = new System.Drawing.Point(54, 352);
+            this.groupBox1.Location = new System.Drawing.Point(47, 520);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(298, 146);
+            this.groupBox1.Size = new System.Drawing.Size(305, 146);
             this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "groupBox1";
+            this.groupBox1.Text = "Resultat en iteration (I bild)";
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.btnVit);
-            this.groupBox2.Controls.Add(this.btnSvart);
             this.groupBox2.Controls.Add(this.btnVäljFärg);
             this.groupBox2.Controls.Add(this.btnUndersöktFärg);
             this.groupBox2.Controls.Add(this.lblUndersöktFärg);
-            this.groupBox2.Location = new System.Drawing.Point(54, 504);
+            this.groupBox2.Location = new System.Drawing.Point(47, 672);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(298, 152);
+            this.groupBox2.Size = new System.Drawing.Size(305, 152);
             this.groupBox2.TabIndex = 9;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "groupBox2";
             // 
-            // btnVit
-            // 
-            this.btnVit.Location = new System.Drawing.Point(94, 101);
-            this.btnVit.Name = "btnVit";
-            this.btnVit.Size = new System.Drawing.Size(82, 37);
-            this.btnVit.TabIndex = 13;
-            this.btnVit.Text = "Vit";
-            this.btnVit.UseVisualStyleBackColor = true;
-            this.btnVit.Click += new System.EventHandler(this.btnVit_Click);
-            // 
-            // btnSvart
-            // 
-            this.btnSvart.Location = new System.Drawing.Point(94, 60);
-            this.btnSvart.Name = "btnSvart";
-            this.btnSvart.Size = new System.Drawing.Size(82, 35);
-            this.btnSvart.TabIndex = 12;
-            this.btnSvart.Text = "Svart";
-            this.btnSvart.UseVisualStyleBackColor = true;
-            this.btnSvart.Click += new System.EventHandler(this.btnSvart_Click);
-            // 
             // btnVäljFärg
             // 
-            this.btnVäljFärg.Location = new System.Drawing.Point(94, 23);
+            this.btnVäljFärg.Location = new System.Drawing.Point(68, 63);
             this.btnVäljFärg.Name = "btnVäljFärg";
-            this.btnVäljFärg.Size = new System.Drawing.Size(82, 35);
+            this.btnVäljFärg.Size = new System.Drawing.Size(82, 36);
             this.btnVäljFärg.TabIndex = 11;
             this.btnVäljFärg.Text = "Välj färg";
             this.btnVäljFärg.UseVisualStyleBackColor = true;
@@ -180,10 +162,10 @@ namespace GymnasiearbeteWindowsForms
             this.btnUndersöktFärg.BackColor = System.Drawing.Color.LavenderBlush;
             this.btnUndersöktFärg.Enabled = false;
             this.btnUndersöktFärg.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.btnUndersöktFärg.Location = new System.Drawing.Point(183, 29);
+            this.btnUndersöktFärg.Location = new System.Drawing.Point(176, 27);
             this.btnUndersöktFärg.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnUndersöktFärg.Name = "btnUndersöktFärg";
-            this.btnUndersöktFärg.Size = new System.Drawing.Size(86, 97);
+            this.btnUndersöktFärg.Size = new System.Drawing.Size(93, 97);
             this.btnUndersöktFärg.TabIndex = 10;
             this.btnUndersöktFärg.UseVisualStyleBackColor = false;
             // 
@@ -198,21 +180,71 @@ namespace GymnasiearbeteWindowsForms
             // pictureBoxGraf
             // 
             this.pictureBoxGraf.BackColor = System.Drawing.SystemColors.Info;
-            this.pictureBoxGraf.Location = new System.Drawing.Point(39, 12);
+            this.pictureBoxGraf.Location = new System.Drawing.Point(7, 38);
             this.pictureBoxGraf.Name = "pictureBoxGraf";
-            this.pictureBoxGraf.Size = new System.Drawing.Size(313, 322);
+            this.pictureBoxGraf.Size = new System.Drawing.Size(292, 305);
             this.pictureBoxGraf.TabIndex = 10;
             this.pictureBoxGraf.TabStop = false;
             this.pictureBoxGraf.Click += new System.EventHandler(this.pictureBoxGraf_Click);
             this.pictureBoxGraf.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBoxGraf_Paint);
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.label2);
+            this.groupBox3.Controls.Add(this.lblTextStandardavikelse);
+            this.groupBox3.Controls.Add(this.lblTextAntalPixlarPerIteration);
+            this.groupBox3.Controls.Add(this.lblTextAntalIterationer);
+            this.groupBox3.Controls.Add(this.pictureBoxGraf);
+            this.groupBox3.Location = new System.Drawing.Point(47, 23);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(305, 467);
+            this.groupBox3.TabIndex = 11;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Fördelning över många iterationer";
+            // 
+            // lblTextAntalIterationer
+            // 
+            this.lblTextAntalIterationer.AutoSize = true;
+            this.lblTextAntalIterationer.Location = new System.Drawing.Point(86, 370);
+            this.lblTextAntalIterationer.Name = "lblTextAntalIterationer";
+            this.lblTextAntalIterationer.Size = new System.Drawing.Size(125, 20);
+            this.lblTextAntalIterationer.TabIndex = 11;
+            this.lblTextAntalIterationer.Text = "Antal iterationer:";
+            // 
+            // lblTextAntalPixlarPerIteration
+            // 
+            this.lblTextAntalPixlarPerIteration.AutoSize = true;
+            this.lblTextAntalPixlarPerIteration.Location = new System.Drawing.Point(33, 390);
+            this.lblTextAntalPixlarPerIteration.Name = "lblTextAntalPixlarPerIteration";
+            this.lblTextAntalPixlarPerIteration.Size = new System.Drawing.Size(178, 20);
+            this.lblTextAntalPixlarPerIteration.TabIndex = 12;
+            this.lblTextAntalPixlarPerIteration.Text = "Antal pixlar per iteration:";
+            // 
+            // lblTextStandardavikelse
+            // 
+            this.lblTextStandardavikelse.AutoSize = true;
+            this.lblTextStandardavikelse.Location = new System.Drawing.Point(76, 410);
+            this.lblTextStandardavikelse.Name = "lblTextStandardavikelse";
+            this.lblTextStandardavikelse.Size = new System.Drawing.Size(135, 20);
+            this.lblTextStandardavikelse.TabIndex = 13;
+            this.lblTextStandardavikelse.Text = "Standardavikelse:";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(116, 430);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(95, 20);
+            this.label2.TabIndex = 14;
+            this.label2.Text = "Medelvärde:";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.ClientSize = new System.Drawing.Size(1924, 732);
-            this.Controls.Add(this.pictureBoxGraf);
+            this.ClientSize = new System.Drawing.Size(1924, 914);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnBeräkna);
@@ -225,6 +257,8 @@ namespace GymnasiearbeteWindowsForms
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxGraf)).EndInit();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -243,9 +277,12 @@ namespace GymnasiearbeteWindowsForms
         private System.Windows.Forms.Label lblUndersöktFärg;
         private System.Windows.Forms.Button btnUndersöktFärg;
         private System.Windows.Forms.Button btnVäljFärg;
-        private System.Windows.Forms.Button btnVit;
-        private System.Windows.Forms.Button btnSvart;
         private System.Windows.Forms.PictureBox pictureBoxGraf;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Label lblTextAntalPixlarPerIteration;
+        private System.Windows.Forms.Label lblTextAntalIterationer;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label lblTextStandardavikelse;
     }
 }
 
